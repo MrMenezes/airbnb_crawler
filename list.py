@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 import sys
 
 
-def total(id_value, check_in, check_out):
+def get_total(id_value, check_in, check_out, adults):
     headers = {
         'x-airbnb-api-key': 'd306zoyjsyarp7ifhu67rjxn52tv0t20',
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36',
@@ -15,8 +15,8 @@ def total(id_value, check_in, check_out):
         ('operationName', 'PdpPlatformSections'),
         ('locale', 'pt'),
         ('currency', 'BRL'),
-        ('variables', '{"request":{"id":"'+id_value +
-         '","layouts":[],"sectionIds":["BOOK_IT_SIDEBAR"],"checkIn":"'+check_in+'","checkOut":"'+check_out+'"}}'),
+        ('variables', '{"request":{"id":"'+str(id_value) +
+         '","layouts":[],"adults":"'+str(adults)+'","sectionIds":["BOOK_IT_SIDEBAR"],"checkIn":"'+check_in+'","checkOut":"'+check_out+'"}}'),
         ('extensions',
          '{"persistedQuery":{"version":1,"sha256Hash":"c4e4690265fdbd38d7819a8eb702dde2d92398761ae85881c62bd04e0585491b"}}'),
     )
@@ -31,7 +31,7 @@ def total(id_value, check_in, check_out):
     return total
 
 
-def get_wishlists(wishlists, check_in, check_out, adults):
+def get_wishlists(wishlists, check_in, check_out, adults, total=None):
     headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36',
     }
@@ -60,7 +60,9 @@ def get_wishlists(wishlists, check_in, check_out, adults):
         simple_data['spaceType'] = item['listing']['spaceType']
         simple_data['url'] = 'https://www.airbnb.com.br/rooms/{id}?adults={adults}&check_in={check_in}&check_out={check_out}'.format(
             id=item_id[0], adults=adults, check_in=check_in, check_out=check_out)
-        simple_data['total'] = total(item_id[0], check_in, check_out)
+        if total is not None:
+            simple_data['total'] = get_total(
+                item_id[0], check_in, check_out, adults)
         simple_data['id'] = item_id[0]
         items_data.append(simple_data)
     return items_data
