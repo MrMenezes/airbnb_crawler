@@ -3,10 +3,6 @@ import json
 from bs4 import BeautifulSoup
 import sys
 
-adults = 2
-check_in = '2021-05-10'
-check_out = '2021-05-12'
-
 
 def total(id_value, check_in, check_out):
     headers = {
@@ -68,9 +64,3 @@ def get_wishlists(wishlists, check_in, check_out, adults):
         simple_data['id'] = item_id[0]
         items_data.append(simple_data)
     return items_data
-
-
-wishlists = 867287597 if len(sys.argv) < 2 else sys.argv[1]
-
-print(json.dumps(get_wishlists(wishlists, check_in,
-                               check_out, adults), sort_keys=True, indent=4))
