@@ -42,9 +42,12 @@ def get_wishlists(wishlists, check_in, check_out, adults, total=None):
     soup = BeautifulSoup(response.text, 'html.parser')
     data_soup = soup.find('script', id='data-state')
     data_json = json.loads(data_soup.string)
-    items = data_json['niobeMinimalClientData'][0][1]['data']['presentation'][
+    items1 = data_json['niobeMinimalClientData'][0][1]['data']['presentation'][
         'wishlistDetailPage']['wishlistDetailPage']['sections'][0]['section']['items']
+    items2 = data_json['niobeMinimalClientData'][0][1]['data']['presentation'][
+        'wishlistDetailPage']['wishlistDetailPage']['sections'][1]['section']['items']
 
+    items = items1 + items2
     items_data = []
     for item in items:
         simple_data = {}
