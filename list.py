@@ -32,7 +32,7 @@ def get_total(id_value, check_in, check_out, adults, children=0, infants=0):
     return {"total": total, "disponibility": disponibility}
 
 
-def get_wishlists(wishlists, check_in, check_out, adults, total=None):
+def get_wishlists(wishlists, check_in, check_out, adults, total=None, children=0, infants=0):
     headers = {
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36',
     }
@@ -62,11 +62,10 @@ def get_wishlists(wishlists, check_in, check_out, adults, total=None):
         simple_data['pictureUrl'] = item['listing']['pictureUrl']
         simple_data['publicAddress'] = item['listing']['publicAddress']
         simple_data['spaceType'] = item['listing']['spaceType']
-        simple_data['url'] = 'https://www.airbnb.com.br/rooms/{id}?adults={adults}'.format(
-            id=item_id[0], adults=adults)
+        simple_data['url'] = 'https://www.airbnb.com.br/rooms/' + item_id[0]
         if total is not None:
             total_item = get_total(
-                item_id[0], check_in, check_out, adults)
+                item_id[0], check_in, check_out, adults, children, infants)
             simple_data['total'] = total_item['total']
             simple_data['disponibility'] = total_item['disponibility']
         simple_data['id'] = item_id[0]
