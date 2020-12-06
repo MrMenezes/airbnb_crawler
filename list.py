@@ -28,7 +28,8 @@ def get_total(id_value, check_in, check_out, adults):
     section = data_json['data']['merlin']['pdpSections']['sections'][0]
 
     total = section['section']['price']['total']['amount']
-    return total
+    disponibility = section['section']['localizedUnavailabilityMessage'] is None
+    return {"total": total, "disponibility": disponibility}
 
 
 def get_wishlists(wishlists, check_in, check_out, adults, total=None):
@@ -64,8 +65,10 @@ def get_wishlists(wishlists, check_in, check_out, adults, total=None):
         simple_data['url'] = 'https://www.airbnb.com.br/rooms/{id}?adults={adults}&check_in={check_in}&check_out={check_out}'.format(
             id=item_id[0], adults=adults, check_in=check_in, check_out=check_out)
         if total is not None:
-            simple_data['total'] = get_total(
+            total_item = get_total(
                 item_id[0], check_in, check_out, adults)
+            simple_data['total'] = total_item['total']
+            simple_data['disponibility'] = total_item['disponibility']
         simple_data['id'] = item_id[0]
         items_data.append(simple_data)
     return items_data
