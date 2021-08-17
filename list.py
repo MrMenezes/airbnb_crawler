@@ -1,7 +1,6 @@
 import requests
 import json
 from bs4 import BeautifulSoup
-import sys
 
 
 def get_total(id_value, check_in, check_out, adults, children=0, infants=0):
@@ -33,17 +32,14 @@ def get_total(id_value, check_in, check_out, adults, children=0, infants=0):
 
 
 def get_wishlists(wishlists, check_in, check_out, adults, total=None, children=0, infants=0):
-    headers = {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36',
-    }
 
     response = requests.get(
-        'https://www.airbnb.com.br/wishlists/{wishlists}'.format(wishlists=wishlists), headers=headers)
+        'https://www.airbnb.com.br/wishlists/{wishlists}'.format(wishlists=wishlists))
 
     soup = BeautifulSoup(response.text, 'html.parser')
     data_soup = soup.find('script', id='data-state')
     data_json = json.loads(data_soup.string)
-    temp_items = data_json['niobeMinimalClientData'][0][1]['data']['presentation'][
+    temp_items = data_json['niobeMinimalClientData'][1][1]['data']['presentation'][
         'wishlistDetailPage']['wishlistDetailPage']['sections']
 
     items = []
